@@ -17,8 +17,11 @@ class ImageToPDFApp:
 
         self.file_paths = []
         self.thumbnails = []
-        
+
         self.setup_ui()
+        self.root.bind("<Control-o>", lambda _: self.select_images())
+        self.root.bind("<Control-Return>", lambda _: self.create_pdf())
+        self.root.bind("<Escape>", lambda _: self.clear_images())
     
     def setup_ui(self):
         # Title

@@ -20,6 +20,9 @@ class PDFtoWordApp:
         self.pdf_path = None
 
         self.setup_ui()
+        self.root.bind("<Control-o>", lambda _: self.select_pdf())
+        self.root.bind("<Control-Return>", lambda _: self.convert_to_word())
+        self.root.bind("<Escape>", lambda _: self.clear_pdf())
 
     def setup_ui(self):
         # Title
