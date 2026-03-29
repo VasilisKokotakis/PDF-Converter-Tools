@@ -132,7 +132,22 @@ class ImageToPDFApp:
             remove_btn = ctk.CTkButton(frame, text="❌", width=40, height=40,
                                      command=lambda p=path: self.remove_image(p),
                                      fg_color="#e74c3c", hover_color="#c0392b", font=ctk.CTkFont(size=14))
-            remove_btn.pack(side="right")
+            remove_btn.pack(side="right", padx=(5, 0))
+
+            order_frame = ctk.CTkFrame(frame, fg_color="transparent")
+            order_frame.pack(side="right")
+
+            up_btn = ctk.CTkButton(order_frame, text="▲", width=36, height=44,
+                                   command=lambda idx=i: self.move_image(idx, -1),
+                                   font=ctk.CTkFont(size=12),
+                                   state="normal" if i > 0 else "disabled")
+            up_btn.pack(side="top", pady=(0, 2))
+
+            down_btn = ctk.CTkButton(order_frame, text="▼", width=36, height=44,
+                                     command=lambda idx=i: self.move_image(idx, 1),
+                                     font=ctk.CTkFont(size=12),
+                                     state="normal" if i < len(self.file_paths) - 1 else "disabled")
+            down_btn.pack(side="top")
     
     def remove_image(self, path):
         if path in self.file_paths:
@@ -141,6 +156,13 @@ class ImageToPDFApp:
             self.thumbnails.pop(idx)
             self.update_list()
     
+    def move_image(self, idx, direction):
+        new_idx = idx + direction
+        if 0 <= new_idx < len(self.file_paths):
+            self.file_paths[idx], self.file_paths[new_idx] = self.file_paths[new_idx], self.file_paths[idx]
+            self.thumbnails[idx], self.thumbnails[new_idx] = self.thumbnails[new_idx], self.thumbnails[idx]
+            self.update_list()
+
     def clear_images(self):
         self.file_paths.clear()
         self.thumbnails.clear()
