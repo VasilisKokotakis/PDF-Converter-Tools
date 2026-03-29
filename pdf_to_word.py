@@ -93,8 +93,15 @@ class PDFtoWordApp:
         )
         if path:
             self.pdf_path = path
+            size_kb = os.path.getsize(path) / 1024
+            try:
+                with pdfplumber.open(path) as pdf:
+                    pages = len(pdf.pages)
+            except Exception:
+                pages = None
+            page_info = f"{pages} page{'s' if pages != 1 else ''}" if pages is not None else ""
             self.file_label.configure(
-                text=f"Selected: {os.path.basename(path)}"
+                text=f"Selected: {os.path.basename(path)}  —  {size_kb:.1f} KB  |  {page_info}"
             )
 
     def clear_pdf(self):
