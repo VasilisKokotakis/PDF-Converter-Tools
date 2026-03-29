@@ -110,7 +110,8 @@ class PDFtoWordApp:
                     if text.strip():
                         for line in text.split("\n"):
                             doc.add_paragraph(line)
-                    doc.add_page_break()
+                    if i < total_pages:
+                        doc.add_page_break()
 
                     self.progress.set(i / total_pages)
                     self.root.update()

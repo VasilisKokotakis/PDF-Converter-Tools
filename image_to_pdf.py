@@ -81,7 +81,7 @@ class ImageToPDFApp:
             img.thumbnail((100, 100), Image.Resampling.LANCZOS)
             photo = ImageTk.PhotoImage(img)
             self.thumbnails.append(photo)
-        except:
+        except Exception:
             self.thumbnails.append(None)
     
     def update_list(self):
