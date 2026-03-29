@@ -46,7 +46,7 @@ Extract text from PDF files and save it as a Word document.
 * **Progress bar** during conversion
 * **Exports to `.docx` format**
 
-⚠️ **Note:**
+**Note:**
 This tool extracts **text only**. Images, tables, and complex formatting are not preserved.
 
 ---

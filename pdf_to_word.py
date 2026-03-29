@@ -49,7 +49,7 @@ class PDFtoWordApp:
 
         self.select_btn = ctk.CTkButton(
             btn_frame,
-            text="📄 Select PDF",
+            text="Select PDF",
             command=self.select_pdf,
             width=160,
             height=40,
@@ -59,7 +59,7 @@ class PDFtoWordApp:
 
         self.clear_btn = ctk.CTkButton(
             btn_frame,
-            text="🗑️ Clear",
+            text="Clear",
             command=self.clear_pdf,
             width=120,
             height=40,

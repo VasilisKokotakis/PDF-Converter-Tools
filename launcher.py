@@ -35,7 +35,7 @@ class LauncherApp:
 
         ctk.CTkButton(
             self.root,
-            text="🖼️  Image → PDF",
+            text="Image → PDF",
             command=lambda: self._launch("image_to_pdf.py"),
             height=50,
             font=ctk.CTkFont(size=16, weight="bold"),
@@ -45,7 +45,7 @@ class LauncherApp:
 
         ctk.CTkButton(
             self.root,
-            text="📄  PDF → Word",
+            text="PDF → Word",
             command=lambda: self._launch("pdf_to_word.py"),
             height=50,
             font=ctk.CTkFont(size=16, weight="bold"),

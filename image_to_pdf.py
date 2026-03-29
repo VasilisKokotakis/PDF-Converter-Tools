@@ -41,7 +41,7 @@ class ImageToPDFApp:
         self.title_label.pack(pady=30)
         
         # Browse button (clean, centered)
-        self.browse_btn = ctk.CTkButton(self.root, text="📁 Browse Files", 
+        self.browse_btn = ctk.CTkButton(self.root, text="Browse Files",
                                        command=self.select_images, height=50, 
                                        font=ctk.CTkFont(size=20, weight="bold"),
                                        fg_color="#3498db", hover_color="#2980b9")
@@ -59,7 +59,7 @@ class ImageToPDFApp:
         self.btn_frame = ctk.CTkFrame(self.root)
         self.btn_frame.pack(pady=20, padx=40, fill="x")
         
-        self.clear_btn = ctk.CTkButton(self.btn_frame, text="🗑️ Clear All", 
+        self.clear_btn = ctk.CTkButton(self.btn_frame, text="Clear All",
                                       command=self.clear_images, fg_color="#e74c3c", hover_color="#c0392b")
         self.clear_btn.pack(side="left", padx=15, pady=15)
         
@@ -129,7 +129,7 @@ class ImageToPDFApp:
                                     text_color="gray70", anchor="w")
             size_label.pack(anchor="w")
             
-            remove_btn = ctk.CTkButton(frame, text="❌", width=40, height=40,
+            remove_btn = ctk.CTkButton(frame, text="X", width=40, height=40,
                                      command=lambda p=path: self.remove_image(p),
                                      fg_color="#e74c3c", hover_color="#c0392b", font=ctk.CTkFont(size=14))
             remove_btn.pack(side="right", padx=(5, 0))
@@ -182,7 +182,7 @@ class ImageToPDFApp:
             self.progress.set(0)
             self.browse_btn.configure(state="disabled")
             self.clear_btn.configure(state="disabled")
-            self.convert_btn.configure(state="disabled", text="🔄 Converting...")
+            self.convert_btn.configure(state="disabled", text="Converting...")
             threading.Thread(target=self._convert_worker, args=(pdf_path,), daemon=True).start()
 
     def _convert_worker(self, pdf_path):
@@ -195,7 +195,7 @@ class ImageToPDFApp:
                 self.root.after(0, self.progress.set, progress)
 
             images[0].save(pdf_path, "PDF", resolution=150.0, save_all=True, append_images=images[1:])
-            self.root.after(0, lambda: messagebox.showinfo("Success!", f"PDF created successfully!\n\n📄 {pdf_path}"))
+            self.root.after(0, lambda: messagebox.showinfo("Success!", f"PDF created successfully!\n\n{pdf_path}"))
         except Exception as e:
             self.root.after(0, lambda: messagebox.showerror("Error", f"Failed to create PDF:\n{str(e)}"))
         finally:
