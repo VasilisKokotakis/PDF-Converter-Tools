@@ -124,7 +124,10 @@ class PDFtoWordApp:
                 f"Word document created:\n{save_path}"
             )
         except Exception as e:
-            messagebox.showerror("Error", f"Conversion failed:\n{e}")
+            if "password" in str(e).lower() or "encrypted" in str(e).lower():
+                messagebox.showerror("Protected PDF", "This PDF is password-protected and cannot be converted.")
+            else:
+                messagebox.showerror("Error", f"Conversion failed:\n{e}")
         finally:
             self.progress.set(0)
             self.convert_btn.configure(state="normal", text="Convert to Word")
