@@ -19,15 +19,15 @@ Double-click **PDFConverterTools** to open the launcher, then click the tool you
 
 ### Basic steps
 
-1. Click **Browse Files** to pick your images — or drag and drop them directly onto the list
-2. Check the order — use the **up and down arrows** on each row to rearrange
+1. Click **Browse Files** to pick your images - or drag and drop them directly onto the list
+2. Check the order - use the **up and down arrows** on each row to rearrange
 3. Click **Convert to PDF**
 4. Choose where to save the file
 5. Done
 
 ### Tips
 
-- You can add images from multiple folders — just click Browse Files again
+- You can add images from multiple folders - just click Browse Files again
 - To remove a single image, click the **X** button on its row
 - To start over, click **Clear All**
 - Supported formats: JPG, PNG, BMP, TIFF, WEBP
@@ -46,8 +46,8 @@ Double-click **PDFConverterTools** to open the launcher, then click the tool you
 
 ### Things to know
 
-- Only **text** is extracted — images, tables, and formatting inside the PDF are not carried over
-- If the PDF is **password-protected**, the tool will tell you and stop — it cannot convert locked files
+- Only **text** is extracted - images, tables, and formatting inside the PDF are not carried over
+- If the PDF is **password-protected**, the tool will tell you and stop - it cannot convert locked files
 - To pick a different PDF, click **Clear** and then **Select PDF** again
 
 ---
