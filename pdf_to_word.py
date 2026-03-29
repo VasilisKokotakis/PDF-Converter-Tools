@@ -14,6 +14,7 @@ class PDFtoWordApp:
         self.root.title("PDF to Word Converter")
         self.root.geometry("700x400")
         self.root.resizable(False, False)
+        self.root.eval("tk::PlaceWindow . center")
 
         self.pdf_path = None
 

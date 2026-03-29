@@ -12,7 +12,8 @@ class ImageToPDFApp:
         self.root.title("Image to PDF Converter")
         self.root.geometry("900x700")
         self.root.resizable(True, True)
-        
+        self.root.eval("tk::PlaceWindow . center")
+
         self.file_paths = []
         self.thumbnails = []
         
