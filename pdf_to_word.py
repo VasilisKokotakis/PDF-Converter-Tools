@@ -53,6 +53,18 @@ class PDFtoWordApp:
         )
         self.select_btn.grid(row=0, column=0, padx=10)
 
+        self.clear_btn = ctk.CTkButton(
+            btn_frame,
+            text="🗑️ Clear",
+            command=self.clear_pdf,
+            width=120,
+            height=40,
+            font=ctk.CTkFont(size=16, weight="bold"),
+            fg_color="#e74c3c",
+            hover_color="#c0392b"
+        )
+        self.clear_btn.grid(row=0, column=1, padx=10)
+
         self.convert_btn = ctk.CTkButton(
             btn_frame,
             text="Convert to Word",
@@ -63,7 +75,7 @@ class PDFtoWordApp:
             fg_color="#27ae60",
             hover_color="#2ecc71"
         )
-        self.convert_btn.grid(row=0, column=1, padx=10)
+        self.convert_btn.grid(row=0, column=2, padx=10)
 
         # Progress
         self.progress = ctk.CTkProgressBar(
@@ -84,6 +96,10 @@ class PDFtoWordApp:
             self.file_label.configure(
                 text=f"Selected: {os.path.basename(path)}"
             )
+
+    def clear_pdf(self):
+        self.pdf_path = None
+        self.file_label.configure(text="No PDF selected")
 
     def convert_to_word(self):
         if not self.pdf_path:
