@@ -3,6 +3,7 @@ from tkinter import filedialog, messagebox
 from docx import Document
 import pdfplumber
 import os
+import threading
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -121,11 +122,14 @@ class PDFtoWordApp:
         if not save_path:
             return
 
-        try:
-            self.progress.set(0)
-            self.convert_btn.configure(state="disabled", text="Converting...")
-            self.root.update()
+        self.progress.set(0)
+        self.select_btn.configure(state="disabled")
+        self.clear_btn.configure(state="disabled")
+        self.convert_btn.configure(state="disabled", text="Converting...")
+        threading.Thread(target=self._convert_worker, args=(save_path,), daemon=True).start()
 
+    def _convert_worker(self, save_path):
+        try:
             doc = Document()
             with pdfplumber.open(self.pdf_path) as pdf:
                 total_pages = len(pdf.pages)
@@ -137,23 +141,23 @@ class PDFtoWordApp:
                     if i < total_pages:
                         doc.add_page_break()
 
-                    self.progress.set(i / total_pages)
-                    self.root.update()
+                    self.root.after(0, self.progress.set, i / total_pages)
 
             doc.save(save_path)
-
-            messagebox.showinfo(
-                "Success",
-                f"Word document created:\n{save_path}"
-            )
+            self.root.after(0, lambda: messagebox.showinfo("Success", f"Word document created:\n{save_path}"))
         except Exception as e:
             if "password" in str(e).lower() or "encrypted" in str(e).lower():
-                messagebox.showerror("Protected PDF", "This PDF is password-protected and cannot be converted.")
+                self.root.after(0, lambda: messagebox.showerror("Protected PDF", "This PDF is password-protected and cannot be converted."))
             else:
-                messagebox.showerror("Error", f"Conversion failed:\n{e}")
+                self.root.after(0, lambda: messagebox.showerror("Error", f"Conversion failed:\n{e}"))
         finally:
-            self.progress.set(0)
-            self.convert_btn.configure(state="normal", text="Convert to Word")
+            self.root.after(0, self._reset_ui)
+
+    def _reset_ui(self):
+        self.progress.set(0)
+        self.select_btn.configure(state="normal")
+        self.clear_btn.configure(state="normal")
+        self.convert_btn.configure(state="normal", text="Convert to Word")
 
     def run(self):
         self.root.mainloop()

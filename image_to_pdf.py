@@ -2,6 +2,7 @@ import customtkinter as ctk
 from tkinter import messagebox, filedialog
 from PIL import Image, ImageOps, ImageTk
 import os
+import threading
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -131,33 +132,40 @@ class ImageToPDFApp:
         if not self.file_paths:
             messagebox.showwarning("No images", "Please select images first.")
             return
-        
+
         pdf_path = filedialog.asksaveasfilename(
             title="Save PDF As",
-            defaultextension=".pdf", 
+            defaultextension=".pdf",
             filetypes=[("PDF files", "*.pdf")]
         )
         if pdf_path:
             self.progress.set(0)
+            self.browse_btn.configure(state="disabled")
+            self.clear_btn.configure(state="disabled")
             self.convert_btn.configure(state="disabled", text="🔄 Converting...")
-            self.root.update()
-            
-            try:
-                images = []
-                for i, f in enumerate(self.file_paths):
-                    img = ImageOps.exif_transpose(Image.open(f)).convert('RGB')
-                    images.append(img)
-                    progress = (i + 1) / len(self.file_paths)
-                    self.progress.set(progress)
-                    self.root.update()
-                
-                images[0].save(pdf_path, "PDF", resolution=150.0, save_all=True, append_images=images[1:])
-                messagebox.showinfo("Success!", f"PDF created successfully!\n\n📄 {pdf_path}")
-            except Exception as e:
-                messagebox.showerror("Error", f"Failed to create PDF:\n{str(e)}")
-            finally:
-                self.progress.set(0)
-                self.convert_btn.configure(state="normal", text="Convert to PDF")
+            threading.Thread(target=self._convert_worker, args=(pdf_path,), daemon=True).start()
+
+    def _convert_worker(self, pdf_path):
+        try:
+            images = []
+            for i, f in enumerate(self.file_paths):
+                img = ImageOps.exif_transpose(Image.open(f)).convert('RGB')
+                images.append(img)
+                progress = (i + 1) / len(self.file_paths)
+                self.root.after(0, self.progress.set, progress)
+
+            images[0].save(pdf_path, "PDF", resolution=150.0, save_all=True, append_images=images[1:])
+            self.root.after(0, lambda: messagebox.showinfo("Success!", f"PDF created successfully!\n\n📄 {pdf_path}"))
+        except Exception as e:
+            self.root.after(0, lambda: messagebox.showerror("Error", f"Failed to create PDF:\n{str(e)}"))
+        finally:
+            self.root.after(0, self._reset_ui)
+
+    def _reset_ui(self):
+        self.progress.set(0)
+        self.browse_btn.configure(state="normal")
+        self.clear_btn.configure(state="normal")
+        self.convert_btn.configure(state="normal", text="Convert to PDF")
     
     def run(self):
         self.root.mainloop()
