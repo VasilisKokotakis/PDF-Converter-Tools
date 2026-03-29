@@ -1,15 +1,23 @@
 import customtkinter as ctk
 from tkinter import messagebox, filedialog
 from PIL import Image, ImageOps, ImageTk
+from tkinterdnd2 import TkinterDnD, DND_FILES
 import os
 import threading
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
+
+class _CTkWithDnD(ctk.CTk, TkinterDnD.DnDWrapper):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.TkdndVersion = TkinterDnD._require(self)
+
+
 class ImageToPDFApp:
     def __init__(self):
-        self.root = ctk.CTk()
+        self.root = _CTkWithDnD()
         self.root.title("Image to PDF Converter")
         self.root.geometry("900x700")
         self.root.resizable(True, True)
@@ -22,6 +30,9 @@ class ImageToPDFApp:
         self.root.bind("<Control-o>", lambda _: self.select_images())
         self.root.bind("<Control-Return>", lambda _: self.create_pdf())
         self.root.bind("<Escape>", lambda _: self.clear_images())
+
+        self.list_frame.drop_target_register(DND_FILES)
+        self.list_frame.dnd_bind("<<Drop>>", self._on_drop)
     
     def setup_ui(self):
         # Title
@@ -61,6 +72,10 @@ class ImageToPDFApp:
                                         fg_color="#27ae60", hover_color="#2ecc71")
         self.convert_btn.pack(side="right", padx=15, pady=15)
     
+    def _on_drop(self, event):
+        paths = self.root.tk.splitlist(event.data)
+        self.add_files(paths)
+
     def select_images(self):
         files = filedialog.askopenfilenames(
             title="Select Images",
